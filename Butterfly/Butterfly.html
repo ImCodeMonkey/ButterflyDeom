@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>蝴蝶飞舞</title>
+	<style type="text/css">
+		*{
+			margin: 0;
+			padding: 0;
+		}
+        #wrap{
+        	position: relative;
+        }
+        @-webkit-keyframes fly1
+        {
+             0% 
+             {
+                opacity: 1;-webkit-transform:translate(0px,0px) scale(0,0) rotate(0deg);
+             }
+             20% 
+             {
+                opacity: 1;-webkit-transform:translate(-20px,-10px) scale(1,1) rotate(-20deg);
+             }
+             40% 
+             {
+                opacity: 1;-webkit-transform:translate(-40px,-20px) scale(0.5,1) rotate(-40deg);
+             }
+             60% 
+             {
+                opacity: 1;-webkit-transform:translate(-60px,-30px) scale(1,1) rotate(-60deg);
+             }
+             80% 
+             {
+                opacity: 1;-webkit-transform:translate(-80px,-40px) scale(0.5,1) rotate(-80deg);
+             }
+            100%
+            {
+                opacity: 0;-webkit-transform:translate(-100px,-50px) scale(1,1) rotate(-100deg);
+            }
+        }
+        @-webkit-keyframes fly2
+        {
+          0% {
+          
+          opacity: 1;-webkit-transform:translate(0px,0px) scale(0,0) rotate(0deg);
+          
+          }
+         100%
+            {
+            opacity: 0;-webkit-transform:translate(-50px,-230px) scale(1,1) rotate(-30deg);
+            }
+        }
+        @-webkit-keyframes fly3
+        {
+            0% {opacity: 1;-webkit-transform:translate(0px,0px) scale(0,0) rotate(0deg);}
+            100%{opacity: 0;-webkit-transform:translate(60px,-120px) scale(1,1) rotate(40deg);}
+        }
+    </style>
+</head>
+<body onload="Init()">
+	<script type="text/javascript">
+        function objid(idname){
+            return document.getElementById(idname);
+        }
+        var endTime;
+        var lastX=0;
+        var randhudie=new Array();
+        function objid(idname){
+        	return document.getElementById(idname);
+        }
+        function Init () {
+            // body...
+            objid('clickdiv').addEventListener('touchstart', touchStartFunc, false);
+            objid('clickdiv').addEventListener('touchmove', touchMoveFunc, false);
+            objid('clickdiv').addEventListener('touchend', touchEndFunc, false);  
+            setInterval(createrand,1500);
+        }
+         //touchstart事件  
+          function touchStartFunc(evt) 
+          {  
+            try  
+            {  
+              evt.preventDefault(); //阻止触摸时浏览器的缩放、滚动条滚动等  
+              var touch = evt.touches[0]; //获取第一个触点  
+              var x = Number(touch.pageX); //页面触点X坐标  
+              var y = Number(touch.pageY); //页面触点Y坐标  
+              //记录触点初始位置  
+              // startX = x;  
+              // startY = y;  
+              // alert();
+              // console.log(x,y);
+              createThing(x,y);           
+            }  
+            catch (e) {  
+              alert('touchStartFunc：' + e.message);  
+            }  
+          }  
+          function touchEndFunc(evt)
+          {  
+            var d=new Date();
+            endTime=d.getTime();
+            // console.log(endTime);
+            setTimeout(clearleaf,1500);
+          } 
+
+          function createrand()
+          {
+            var x=rand(50,450);
+            var y=rand(50,650);
+            for(var i=1; i<4;i++)
+            {
+                randhudie[i-1]=document.createElement('img');
+                randhudie[i-1].src='http://tu.kagirl.net/pic/20057/hudie1.png';
+                randhudie[i-1].style.position='absolute';
+                randhudie[i-1].style.top=(y-46)+'px';
+                randhudie[i-1].style.left=(x-30)+'px';
+                randhudie[i-1].style.opacity=0;
+                randhudie[i-1].style.webkitAnimation='fly'+i+' 1s linear forwards';
+                objid('clickdiv').appendChild(randhudie[i-1]);
+            }
+            setTimeout(clearrand,1200)
+          }
+
+          function clearrand () {
+            for(var i=0;i<3;i++)
+            {
+              objid('clickdiv').removeChild(randhudie[i])
+            }
+          }
+
+        function touchMoveFunc(evt) 
+          {  
+            try  
+            {  
+                evt.preventDefault(); //阻止触摸时浏览器的缩放、滚动条滚动等  
+                var touch = evt.touches[0]; //获取第一个触点  
+                var x = Number(touch.pageX); //页面触点X坐标  
+                var y = Number(touch.pageY); //页面触点Y坐标  
+                //判断滑动方向   
+                // if (y - startY >50) 
+                // { 
+                //     id('cake').addEventListener('touchend', touchEndFunc, false);  
+                // }  
+                // console.log(x,y)
+                    // if (x%2==0)
+                    // {                    
+              // console.log(x,y);
+              if(Math.abs(x-lastX)>=4)
+                           {
+                  lastX=x;
+                  createOneThing(x,y);
+
+                  }     
+                    // }              
+            }  
+            catch (e) {  
+                alert('touchMoveFunc：' + e.message);  
+            }  
+          }
+          function rand(min,max)
+            {
+                return min+Math.floor(Math.random()*(max-min+1));
+            }
+        var leafnum=0;
+          function createThing(x,y)
+          {
+            for(var i=1; i<4;i++)
+            {
+                var img=document.createElement('img');
+                img.src='http://tu.kagirl.net/pic/20057/hudie1.png';
+                img.style.position='absolute';
+                img.style.top=(y-46)+'px';
+                img.style.left=(x-30)+'px';
+                img.style.opacity=0;
+                img.id='leaf'+leafnum;
+                leafnum++;
+                img.style.webkitAnimation='fly'+i+' 1s linear forwards';
+                objid('clickdiv').appendChild(img);
+            }
+          }
+          function createOneThing(x,y)
+          {
+                var i=leafnum%3+1;
+                var img=document.createElement('img');
+                img.src='http://hg.jielanhua.cn/ps/hudie1.png';
+                img.style.position='absolute';
+                img.style.top=(y-46)+rand(-20,20)+'px';
+                img.style.left=(x-30)+rand(-20,20)+'px';
+                img.style.opacity=0;
+                img.id='leaf'+leafnum;
+                leafnum++;
+                img.style.webkitAnimation='fly'+i+' '+rand(10,20)/20+'s linear forwards';
+                objid('clickdiv').appendChild(img);
+            
+          }
+
+          function clearleaf()
+          {
+            var nowtime=new Date();
+            if(nowtime.getTime()-endTime>1000)
+            {
+                for(var i=0;i<leafnum;i++)
+                {
+                    var img=objid('leaf'+i);
+                    if(img)
+                    objid('clickdiv').removeChild(img)
+                }
+                leafnum=0;
+            }
+            
+          }
+
+        </script>
+        <div id="wrap" style="overflow:hidden">
+        	<div style='position:absolute;width:133px;height:102px;top:200px;left:100px;'>
+
+        	</div>
+        	<img src="http://tu.kagirl.net/pic/20057/bg20057.jpg" width="100%">
+	        <div id='clickdiv' style='position:absolute;top:0;left:0;width:100%;height:100%;z-index:2000'>
+	        </div>
+        </div>       
+</body>
+</html>
